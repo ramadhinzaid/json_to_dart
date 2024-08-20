@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+    <base href="/json_to_dart/" />
+
+    <meta charset="UTF-8" />
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+    <meta name="description" content="A new Flutter project." />
+
+    <!-- iOS meta tags & icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="web" />
+    <link rel="apple-touch-icon" href="icons/Icon-192.png" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png" />
+
+    <title>json_to_model_custom</title>
+    <link rel="manifest" href="manifest.json" />
+    <!-- JsonEditor Lib -->
+    <script src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.0/dist/jsoneditor.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.0/dist/jsoneditor.min.css"
+    />
+    <!--  -->
+    <!-- Ace Editor -->
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.35.4/src-min-noconflict/ace.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ace-builds@1.35.4/src-min-noconflict/mode-dart.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/ace-builds@1.35.4/css/ace.min.css"
+    />
+  </head>
+
+  <body>
+    <script>
+      function initEditor(initJson, element) {
+        var options = {
+          mode: "code",
+          onChangeText: generateJson,
+        };
+        var jsonEditor = new JSONEditor(element, options);
+        if (initJson) {
+          jsonEditor.set(JSON.parse(initJson));
+        }
+      }
+
+      function generateJson(json) {
+        window.parent.postMessage({ type: "jsonChanged", data: json }, "*");
+      }
+      var aceEditor;
+      function iniDartClass(initClass, element) {
+        aceEditor = ace.edit(element);
+        aceEditor.setTheme("ace/theme/chrome");
+        aceEditor.session.setMode("ace/mode/dart");
+        aceEditor.setReadOnly(true);
+        setClassValue(initClass);
+      }
+
+      function setClassValue(classValue) {
+        if (aceEditor && aceEditor.session) {
+          aceEditor.setValue(classValue, "-1");
+        } else {
+          console.error("ACE Editor is not initialized.");
+        }
+      }
+    </script>
+    <script src="flutter_bootstrap.js" async></script>
+  </body>
+</html>
